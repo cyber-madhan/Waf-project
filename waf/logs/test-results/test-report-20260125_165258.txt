@@ -1,0 +1,9 @@
+========================================
+WAF Security Testing Report
+Target: https://localhost
+Date: Sun Jan 25 04:52:58 PM CET 2026
+========================================
+
+=== SQL Injection Tests ===
+Test #1: SQLi: UNION SELECT
+Payload: ' UNION SELECT NULL,NULL--

@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  bwapp:
+    image: mageblood/bwapp:arm64
+    container_name: bwapp
+    restart: unless-stopped
+    networks:
+      - waf-net
+
+  # nginx:
+  #   image: nginx:stable
+  #   container_name: bwapp-proxy
+  #   depends_on:
+  #     - bwapp
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./certs:/etc/certs:ro
+  #   networks:
+  #     - waf-net
+
+  waf:
+    image: owasp/modsecurity-crs:nginx
+    container_name: waf-proxy
+    entrypoint: ["/opt/waf-scripts/docker-entrypoint-wrapper.sh"]
+    command: ["nginx", "-g", "daemon off;"]
+    depends_on:
+      - bwapp
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - SERVER_NAME=charles.work.gd
+      - BACKEND=http://bwapp:80
+      # ModSecurity Configuration
+      - MODSEC_RULE_ENGINE=On
+      - PARANOIA=2
+      - ANOMALYIN=5
+      - ANOMALYOUT=4
+      - BLOCKING_PARANOIA=2
+      # Request/Response Body Limits
+      - MAX_FILE_SIZE=10485760
+      - COMBINED_FILE_SIZES=10485760
+      # Performance Tuning
+      - TIMEOUT=60
+      - PROXY_TIMEOUT=60
+      - PROXY_SSL_VERIFY=off
+      # Additional Security
+      - VALIDATE_UTF8_ENCODING=On
+      - ALLOWED_METHODS=GET HEAD POST OPTIONS PUT PATCH DELETE
+      - ALLOWED_REQUEST_CONTENT_TYPE=|application/x-www-form-urlencoded| |multipart/form-data| |multipart/related| |text/xml| |application/xml| |application/json|
+      - ALLOWED_HTTP_VERSIONS=HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0
+    volumes:
+      - ./certs:/etc/nginx/conf
+      - ./nginx/default.conf.template:/etc/nginx/templates/conf.d/default.conf.template:ro
+      # Entrypoint wrapper script
+      - ./waf/scripts:/opt/waf-scripts:ro
+      # Custom CRS setup only (don't override base modsecurity.conf)
+      - ./waf/config/crs-setup-custom.conf:/etc/modsecurity.d/owasp-crs/crs-setup-custom.conf:ro
+      # Custom security rules
+      - ./waf/rules:/etc/modsecurity.d/custom-rules:ro
+    networks:
+      - waf-net
+
+networks:
+  waf-net:
+    driver: bridge
