@@ -383,28 +383,3 @@ docker network ls
 | ModSecurity Audit | `/var/log/modsec_audit.log` | Security events |
 | Grafana | `docker logs grafana` | Dashboard logs |
 | Prometheus | `docker logs prometheus` | Metrics logs |
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project uses open-source software:
-- ModSecurity: Apache 2.0 License
-- OWASP CRS: Apache 2.0 License
-- Nginx: BSD License
-- Grafana: AGPL 3.0 License
-- Prometheus: Apache 2.0 License
-
-## 📞 Support
-
-For issues and questions:
-1. Check [Troubleshooting](#-troubleshooting) section
-2. Review documentation in `docs/`
-3. Check container logs
-4. Open an issue with detailed information
