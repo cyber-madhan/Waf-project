@@ -34,6 +34,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "8080:8080"  # Metrics endpoint for Prometheus
     environment:
       - SERVER_NAME=charles.work.gd
       - BACKEND=http://bwapp:80
@@ -66,7 +67,11 @@ services:
       - ./waf/rules:/etc/modsecurity.d/custom-rules:ro
     networks:
       - waf-net
+      - monitoring-net
 
 networks:
   waf-net:
     driver: bridge
+  monitoring-net:
+    external: true
+    name: waf-lab_monitoring-net

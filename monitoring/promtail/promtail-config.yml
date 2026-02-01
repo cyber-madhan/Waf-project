@@ -1,0 +1,87 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # WAF Docker container logs
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+    relabel_configs:
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: 'container'
+      - source_labels: ['__meta_docker_container_log_stream']
+        target_label: 'logstream'
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        target_label: 'service'
+    pipeline_stages:
+      # Parse JSON logs from ModSecurity
+      - json:
+          expressions:
+            timestamp: transaction.time_stamp
+            client_ip: transaction.client_ip
+            host_name: transaction.host_name
+            method: request.method
+            uri: request.uri
+            status: response.http_code
+            message: message
+      # Extract timestamps
+      - timestamp:
+          source: timestamp
+          format: RFC3339Nano
+      # Label extraction
+      - labels:
+          client_ip:
+          method:
+          status:
+          service:
+      # Output formatting
+      - output:
+          source: message
+
+  # WAF log files
+  - job_name: waf-logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: waf-logs
+          service: waf-proxy
+          __path__: /var/log/waf/*.log
+    pipeline_stages:
+      # Parse ModSecurity audit log format
+      - regex:
+          expression: '^(?P<timestamp>\S+\s+\S+)\s+\[(?P<level>\w+)\]\s+(?P<message>.*)$'
+      - timestamp:
+          source: timestamp
+          format: '2006/01/02 15:04:05'
+      - labels:
+          level:
+      - output:
+          source: message
+
+  # System logs (optional)
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*.log
+    pipeline_stages:
+      - match:
+          selector: '{job="varlogs"}'
+          stages:
+            - regex:
+                expression: '^(?P<timestamp>\S+\s+\S+\s+\S+)\s+(?P<hostname>\S+)\s+(?P<service>\S+?)(\[(?P<pid>\d+)\])?:\s+(?P<message>.*)$'
+            - labels:
+                hostname:
+                service:

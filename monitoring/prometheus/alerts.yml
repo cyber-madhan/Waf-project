@@ -1,0 +1,106 @@
+groups:
+  - name: waf_alerts
+    interval: 30s
+    rules:
+      # High number of blocked requests
+      - alert: HighBlockedRequestRate
+        expr: rate(nginx_http_requests_total{status=~"403|406"}[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+          component: waf
+        annotations:
+          summary: "High rate of blocked requests detected"
+          description: "WAF is blocking {{ $value | humanize }} requests/sec for the last 5 minutes"
+
+      # WAF service down
+      - alert: WAFServiceDown
+        expr: up{job="nginx-waf"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: waf
+        annotations:
+          summary: "WAF service is down"
+          description: "WAF proxy (nginx) is not responding for more than 2 minutes"
+
+      # High memory usage
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is above 85% (current: {{ $value | humanize }}%)"
+
+      # High CPU usage
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is above 80% (current: {{ $value | humanize }}%)"
+
+      # Container down
+      - alert: ContainerDown
+        expr: up{job="cadvisor"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "Container monitoring is down"
+          description: "cAdvisor is not responding"
+
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(nginx_http_requests_total{status=~"5.."}[5m]) > 1
+        for: 3m
+        labels:
+          severity: critical
+          component: waf
+        annotations:
+          summary: "High rate of 5xx errors"
+          description: "WAF is returning {{ $value | humanize }} 5xx errors/sec"
+
+      # Disk space warning
+      - alert: DiskSpaceWarning
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 20
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space is below 20% (current: {{ $value | humanize }}%)"
+
+  - name: modsecurity_alerts
+    interval: 30s
+    rules:
+      # Potential attack wave
+      - alert: PotentialAttackWave
+        expr: rate(nginx_http_requests_total{status="403"}[1m]) > 5
+        for: 2m
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Potential attack wave detected"
+          description: "More than 5 blocked requests/sec detected, possible attack in progress"
+
+      # SQL Injection attempts
+      - alert: SQLInjectionAttempts
+        expr: increase(nginx_http_requests_total{status="403"}[5m]) > 50
+        for: 1m
+        labels:
+          severity: high
+          component: security
+          attack_type: sqli
+        annotations:
+          summary: "Multiple SQL injection attempts"
+          description: "{{ $value }} blocked requests in the last 5 minutes, possible SQL injection attack"
