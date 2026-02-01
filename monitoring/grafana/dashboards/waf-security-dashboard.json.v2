@@ -1,0 +1,249 @@
+{
+  "title": "WAF Security Dashboard",
+  "uid": "waf-security",
+  "timezone": "browser",
+  "refresh": "10s",
+  "schemaVersion": 30,
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0},
+      "id": 2,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [{"expr": "rate(nginx_http_requests_total[5m])", "refId": "A"}],
+      "title": "Request Rate",
+      "type": "gauge",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "green", "value": null}, {"color": "red", "value": 80}]
+          },
+          "unit": "reqps"
+        }
+      }
+    },
+    {
+      "datasource": "Loki",
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0},
+      "id": 3,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [{
+        "expr": "sum(count_over_time({container=\"waf-proxy\"} |= \"403 Forbidden\" [5m]))",
+        "refId": "A"
+      }],
+      "title": "Blocked Requests (5m)",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 10}, {"color": "red", "value": 50}]
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 4,
+      "options": {
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [
+        {"expr": "rate(nginx_http_requests_total[5m])", "legendFormat": "Total Requests", "refId": "A"},
+        {"expr": "rate(nginx_http_requests_total{status=~\"4..\"}[5m])", "legendFormat": "4xx Errors", "refId": "B"},
+        {"expr": "rate(nginx_http_requests_total{status=~\"5..\"}[5m])", "legendFormat": "5xx Errors", "refId": "C"}
+      ],
+      "title": "Request Rate Over Time",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {"tooltip": false, "viz": false, "legend": false},
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {"type": "linear"},
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "green", "value": null}]
+          },
+          "unit": "reqps"
+        }
+      }
+    },
+    {
+      "datasource": "Loki",
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 8},
+      "id": 5,
+      "options": {
+        "legend": {"displayMode": "list", "placement": "bottom"},
+        "pieType": "pie",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [{
+        "expr": "sum by (status) (count_over_time({container=\"waf-proxy\"} | json | status != \"\" [1h]))",
+        "legendFormat": "{{status}}",
+        "refId": "A"
+      }],
+      "title": "HTTP Status Codes (1h)",
+      "type": "piechart"
+    },
+    {
+      "datasource": "Loki",
+      "gridPos": {"h": 8, "w": 18, "x": 6, "y": 8},
+      "id": 6,
+      "options": {
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "targets": [{
+        "expr": "{container=\"waf-proxy\"} |= \"ModSecurity\" |= \"denied\"",
+        "refId": "A"
+      }],
+      "title": "WAF Logs (Recent Blocks)",
+      "type": "logs"
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 16},
+      "id": 7,
+      "options": {
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [{
+        "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+        "legendFormat": "CPU Usage",
+        "refId": "A"
+      }],
+      "title": "System CPU Usage",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "axisPlacement": "auto",
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "green", "value": null}, {"color": "red", "value": 80}]
+          },
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 16},
+      "id": 8,
+      "options": {
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [{
+        "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+        "legendFormat": "Memory Usage",
+        "refId": "A"
+      }],
+      "title": "System Memory Usage",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "axisPlacement": "auto",
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "green", "value": null}, {"color": "red", "value": 80}]
+          },
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 16},
+      "id": 9,
+      "options": {
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+        "tooltip": {"mode": "single"}
+      },
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total[5m]) * 8",
+          "legendFormat": "RX {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_network_transmit_bytes_total[5m]) * 8",
+          "legendFormat": "TX {{device}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Network Traffic",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "axisPlacement": "auto",
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{"color": "green", "value": null}]
+          },
+          "unit": "bps"
+        }
+      }
+    }
+  ]
+}
