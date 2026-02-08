@@ -17,7 +17,7 @@
         "textMode": "value"
       },
       "targets": [{
-        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"charles.work.gd\" [$__range]))",
+        "expr": "sum(count_over_time({container=\"waf-proxy\"} [$__range]))",
         "refId": "A"
       }],
       "title": "Total Requests",
@@ -47,7 +47,7 @@
         "textMode": "value"
       },
       "targets": [{
-        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"charles.work.gd\" |~ \"\\\" (200|301|302|304) \" [$__range]))",
+        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"\\\" (200|301|302|304) \" [$__range]))",
         "refId": "A"
       }],
       "title": "Success Requests",
@@ -132,22 +132,22 @@
         "tooltip": {"mode": "single"}
       },
       "targets": [{
-        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"charles.work.gd\" |~ \"\\\" 200 \" [$__range]))",
+        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"\\\" 200 \" [$__range]))",
         "legendFormat": "200",
         "refId": "A"
       },
       {
-        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"charles.work.gd\" |~ \"\\\" 302 \" [$__range]))",
+        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"\\\" 302 \" [$__range]))",
         "legendFormat": "302",
         "refId": "B"
       },
       {
-        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"charles.work.gd\" |~ \"\\\" 403 \" [$__range]))",
+        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"\\\" 403 \" [$__range]))",
         "legendFormat": "403",
         "refId": "C"
       },
       {
-        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"charles.work.gd\" |~ \"\\\" 404 \" [$__range]))",
+        "expr": "sum(count_over_time({container=\"waf-proxy\"} |~ \"\\\" 404 \" [$__range]))",
         "legendFormat": "404",
         "refId": "D"
       }],
@@ -224,7 +224,7 @@
         "wrapLogMessage": false
       },
       "targets": [{
-        "expr": "{container=\"waf-proxy\"} |~ \"charles.work.gd\" |~ \"\\\" (200|301|302|304) \"",
+        "expr": "{container=\"waf-proxy\"} |~ \"\\\" (200|301|302|304) \"",
         "refId": "A"
       }],
       "title": "WAF Success Requests (Recent)",

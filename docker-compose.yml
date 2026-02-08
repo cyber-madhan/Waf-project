@@ -1,8 +1,6 @@
-version: "3.9"
-
 services:
   bwapp:
-    image: mageblood/bwapp:arm64
+    image: mageblood/bwapp:amd64
     container_name: bwapp
     restart: unless-stopped
     networks:
@@ -26,17 +24,16 @@ services:
   waf:
     image: owasp/modsecurity-crs:nginx
     container_name: waf-proxy
-    entrypoint: ["/opt/waf-scripts/docker-entrypoint-wrapper.sh"]
-    command: ["nginx", "-g", "daemon off;"]
+    entrypoint: [ "/opt/waf-scripts/docker-entrypoint-wrapper.sh" ]
+    command: [ "nginx", "-g", "daemon off;" ]
     depends_on:
       - bwapp
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
-      - "8080:8080"  # Metrics endpoint for Prometheus
+      - "8080:8080" # Metrics endpoint for Prometheus
     environment:
-      - SERVER_NAME=charles.work.gd
+      - SERVER_NAME=localhost
       - BACKEND=http://bwapp:80
       # ModSecurity Configuration
       - MODSEC_RULE_ENGINE=On
@@ -57,7 +54,7 @@ services:
       - ALLOWED_REQUEST_CONTENT_TYPE=|application/x-www-form-urlencoded| |multipart/form-data| |multipart/related| |text/xml| |application/xml| |application/json|
       - ALLOWED_HTTP_VERSIONS=HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0
     volumes:
-      - ./certs:/etc/nginx/conf
+
       - ./nginx/default.conf.template:/etc/nginx/templates/conf.d/default.conf.template:ro
       # Entrypoint wrapper script
       - ./waf/scripts:/opt/waf-scripts:ro
