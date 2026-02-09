@@ -40,7 +40,7 @@ This document presents performance testing results for the WAF (Web Application 
 │                                                                                  │
 │   ┌──────────────────┐          ┌──────────────────┐          ┌───────────────┐ │
 │   │   Load Generator │          │    WAF Server    │          │   Backend     │ │
-│   │                  │ ───────> │                  │ ───────> │   (bWAPP)     │ │
+│   │                  │ ───────> │                  │ ───────> │   (Juice Shop)     │ │
 │   │   wrk / ab /     │          │  ModSecurity +   │          │               │ │
 │   │   siege          │          │  Nginx           │          │   Apache/PHP  │ │
 │   │                  │          │                  │          │               │ │
@@ -309,7 +309,7 @@ worker_rlimit_nofile 65535;
 
 ```nginx
 upstream backend {
-    server bwapp:80;
+    server juice-shop:80;
     keepalive 64;
     keepalive_requests 1000;
     keepalive_timeout 60s;

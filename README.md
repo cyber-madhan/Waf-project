@@ -39,7 +39,7 @@ A comprehensive Web Application Firewall (WAF) implementation using ModSecurity 
                                     │               ▼                       ▼                     │
                                     │    ┌─────────────────────┐  ┌─────────────────────┐        │
                                     │    │  project.work.gd    │  │monitoring.project.  │        │
-                                    │    │      → bWAPP        │  │  work.gd → Grafana  │        │
+                                    │    │      → Juice Shop        │  │  work.gd → Grafana  │        │
                                     │    └─────────────────────┘  └─────────────────────┘        │
                                     └─────────────────────────────────────────────────────────────┘
                                                               │
@@ -47,7 +47,7 @@ A comprehensive Web Application Firewall (WAF) implementation using ModSecurity 
                                     ┌─────────────────────────────────────────────────────────────┐
                                     │                     BACKEND APPLICATION                     │
                                     │                                                             │
-                                    │                    bWAPP (Vulnerable App)                   │
+                                    │                    OWASP Juice Shop (Vulnerable App)                   │
                                     │                         :80                                 │
                                     │                                                             │
                                     └─────────────────────────────────────────────────────────────┘

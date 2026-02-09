@@ -335,7 +335,7 @@ docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
 # Expected output:
 # waf-proxy         Up 2 minutes    0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp
-# bwapp             Up 2 minutes    80/tcp
+# juice-shop             Up 2 minutes    80/tcp
 # grafana           Up 2 minutes    0.0.0.0:3000->3000/tcp
 # prometheus        Up 2 minutes    0.0.0.0:9090->9090/tcp
 # loki              Up 2 minutes    3100/tcp

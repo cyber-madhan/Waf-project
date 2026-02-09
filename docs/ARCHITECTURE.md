@@ -69,7 +69,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 │  │  │                   ┌───────────┘                    └───────────┐              │ │ │
 │  │  │                   ▼                                            ▼              │ │ │
 │  │  │   ┌─────────────────────────────┐          ┌─────────────────────────────┐   │ │ │
-│  │  │   │      bWAPP CONTAINER        │          │      GRAFANA CONTAINER      │   │ │ │
+│  │  │   │      Juice Shop CONTAINER        │          │      GRAFANA CONTAINER      │   │ │ │
 │  │  │   │                             │          │                             │   │ │ │
 │  │  │   │   Vulnerable Web App        │          │   Monitoring Dashboard      │   │ │ │
 │  │  │   │   (Apache + PHP + MySQL)    │          │   Port: 3000                │   │ │ │
@@ -140,7 +140,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 │         │         │               │     │                                    │
 │         ▼         │               │     │  ┌────────────┐  ┌──────────────┐ │
 │  ┌─────────────┐  │               │     │  │  promtail  │  │   grafana    │ │
-│  │    bwapp    │  │               │     │  │172.25.0.12 │  │ 172.25.0.13  │ │
+│  │    juice-shop    │  │               │     │  │172.25.0.12 │  │ 172.25.0.13  │ │
 │  │ 172.24.0.20 │  │               │     │  └────────────┘  └──────────────┘ │
 │  └─────────────┘  │               │     │                                    │
 │                   │               │     │  ┌────────────┐  ┌──────────────┐ │
@@ -164,7 +164,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 
      ┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐
      │  Client  │      │   TLS    │      │  Nginx   │      │ModSecurity│     │  Backend │
-     │ Browser  │      │Termination│     │  Proxy   │      │   WAF     │     │  bWAPP   │
+     │ Browser  │      │Termination│     │  Proxy   │      │   WAF     │     │  Juice Shop   │
      └────┬─────┘      └────┬─────┘      └────┬─────┘      └────┬─────┘     └────┬─────┘
           │                 │                 │                 │                │
           │ 1. HTTPS Request│                 │                 │                │
@@ -208,7 +208,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 
      ┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐
      │ Attacker │      │   TLS    │      │  Nginx   │      │ModSecurity│     │  Backend │
-     │          │      │Termination│     │  Proxy   │      │   WAF     │     │  bWAPP   │
+     │          │      │Termination│     │  Proxy   │      │   WAF     │     │  Juice Shop   │
      └────┬─────┘      └────┬─────┘      └────┬─────┘      └────┬─────┘     └────┬─────┘
           │                 │                 │                 │                │
           │ 1. HTTPS Request│                 │                 │                │
@@ -298,7 +298,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 │  │                                                         │ │
 │  │   Docker Desktop / Docker Engine                        │ │
 │  │   ├── waf-proxy container                              │ │
-│  │   ├── bwapp container                                  │ │
+│  │   ├── juice-shop container                                  │ │
 │  │   └── monitoring stack (optional)                      │ │
 │  │                                                         │ │
 │  │   Access: http://localhost                              │ │
@@ -366,7 +366,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 │  │   (Active)     │   │   (Active)     │   │   (Active)     │                   │  │
 │  │                │   │                │   │                │                   │  │
 │  │ waf-proxy      │   │ waf-proxy      │   │ waf-proxy      │                   │  │
-│  │ + bwapp        │   │ + bwapp        │   │ + bwapp        │                   │  │
+│  │ + juice-shop        │   │ + juice-shop        │   │ + juice-shop        │                   │  │
 │  └───────┬────────┘   └───────┬────────┘   └───────┬────────┘                   │  │
 │          │                    │                    │                             │  │
 │          └────────────────────┼────────────────────┘                             │  │
