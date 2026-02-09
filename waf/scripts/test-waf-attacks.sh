@@ -16,7 +16,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-TARGET_URL="${1:-https://charles.work.gd}"
+TARGET_URL="${1:-https://project.work.gd}"
 OUTPUT_DIR="./waf/logs/test-results"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 REPORT_FILE="$OUTPUT_DIR/test-report-$TIMESTAMP.txt"

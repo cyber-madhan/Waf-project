@@ -38,7 +38,7 @@ A comprehensive Web Application Firewall (WAF) implementation using ModSecurity 
                                     │               ┌───────────┴───────────┐                     │
                                     │               ▼                       ▼                     │
                                     │    ┌─────────────────────┐  ┌─────────────────────┐        │
-                                    │    │  charles.work.gd    │  │monitoring.charles.  │        │
+                                    │    │  project.work.gd    │  │monitoring.project.  │        │
                                     │    │      → bWAPP        │  │  work.gd → Grafana  │        │
                                     │    └─────────────────────┘  └─────────────────────┘        │
                                     └─────────────────────────────────────────────────────────────┘
@@ -147,8 +147,8 @@ docker ps
 
 | Service | URL | Credentials |
 |---------|-----|-------------|
-| Protected App | https://charles.work.gd | N/A |
-| Grafana Dashboard | https://monitoring.charles.work.gd | admin / WafAdmin123! |
+| Protected App | https://project.work.gd | N/A |
+| Grafana Dashboard | https://monitoring.project.work.gd | admin / WafAdmin123! |
 | Prometheus | http://localhost:9090 | N/A |
 
 ## 📁 Project Structure
@@ -220,8 +220,8 @@ waf-lab/
 ### Nginx Configuration
 
 The WAF proxy handles two domains:
-- `charles.work.gd` → Backend application (bWAPP)
-- `monitoring.charles.work.gd` → Grafana dashboard
+- `project.work.gd` → Backend application (OWASP Juice Shop)
+- `monitoring.project.work.gd` → Grafana dashboard
 
 See [nginx/default.conf](nginx/default.conf) for full configuration.
 
@@ -229,7 +229,7 @@ See [nginx/default.conf](nginx/default.conf) for full configuration.
 
 ### Grafana Dashboard
 
-Access: https://monitoring.charles.work.gd
+Access: https://monitoring.project.work.gd
 
 **Dashboard Panels:**
 - Total Requests - All requests to the WAF
@@ -298,16 +298,16 @@ SecRule REQUEST_HEADERS:User-Agent "@contains BadBot" \
 
 # Manual tests
 # SQL Injection
-curl -k "https://charles.work.gd/test?id=1' OR '1'='1"
+curl -k "https://project.work.gd/test?id=1' OR '1'='1"
 
 # XSS
-curl -k "https://charles.work.gd/test?q=<script>alert(1)</script>"
+curl -k "https://project.work.gd/test?q=<script>alert(1)</script>"
 
 # LFI
-curl -k "https://charles.work.gd/test?file=../../../etc/passwd"
+curl -k "https://project.work.gd/test?file=../../../etc/passwd"
 
 # RCE
-curl -k "https://charles.work.gd/test?cmd=;cat /etc/passwd"
+curl -k "https://project.work.gd/test?cmd=;cat /etc/passwd"
 ```
 
 Expected: All attacks return HTTP 403

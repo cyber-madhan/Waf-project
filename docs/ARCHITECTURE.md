@@ -28,7 +28,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 │                              ┌──────────────────┐                                    │
 │                              │   DNS Provider   │                                    │
 │                              │                  │                                    │
-│                              │ charles.work.gd  │                                    │
+│                              │ project.work.gd  │                                    │
 │                              │ monitoring.*     │                                    │
 │                              └────────┬─────────┘                                    │
 │                                       │                                              │
@@ -325,8 +325,8 @@ This document outlines the architecture and deployment plan for the Web Applicat
 │  │                 Cloud VPS / Dedicated Server            │ │
 │  │                                                         │ │
 │  │   Public IP: [Assigned by provider]                     │ │
-│  │   Domain: charles.work.gd                               │ │
-│  │   Monitoring: monitoring.charles.work.gd                │ │
+│  │   Domain: project.work.gd                               │ │
+│  │   Monitoring: monitoring.project.work.gd                │ │
 │  │                                                         │ │
 │  │   Docker Engine                                          │ │
 │  │   ├── WAF Stack (docker-compose.yml)                    │ │
@@ -571,7 +571,7 @@ This document outlines the architecture and deployment plan for the Web Applicat
 │                                                                                  │
 │  5. VERIFY                                                                       │
 │     $ ./waf/scripts/test-waf-attacks.sh                                         │
-│     $ curl -k https://charles.work.gd/                                          │
+│     $ curl -k https://project.work.gd/                                          │
 │                                                                                  │
 │  6. ROLLBACK (if needed)                                                         │
 │     $ docker compose down                                                        │

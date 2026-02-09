@@ -446,7 +446,7 @@ curl -X POST \
 # In nginx configuration - restrict access to monitoring
 server {
     listen 443 ssl http2;
-    server_name monitoring.charles.work.gd;
+    server_name monitoring.project.work.gd;
     
     # IP allowlist
     allow 10.0.0.0/8;
@@ -570,7 +570,7 @@ Each organization has:
 
 | Service | Username | Password | URL |
 |---------|----------|----------|-----|
-| Grafana | admin | WafAdmin123! | https://monitoring.charles.work.gd |
+| Grafana | admin | WafAdmin123! | https://monitoring.project.work.gd |
 
 ### 10.2 User Management Commands
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # WAF Monitoring Stack - Setup and Management Script
-# Author: Charles WAF Lab
+# Author: Project WAF Lab
 # Date: January 31, 2026
 
 set -e
@@ -61,7 +61,7 @@ start_monitoring() {
     
     log_success "Monitoring stack started!"
     log_info "Access points:"
-    log_info "  - Grafana: https://monitoring.charles.work.gd (admin/WafAdmin123!)"
+    log_info "  - Grafana: https://monitoring.project.work.gd (admin/WafAdmin123!)"
     log_info "  - Prometheus: http://localhost:9090"
     log_info "  - Loki: http://localhost:3100"
 }

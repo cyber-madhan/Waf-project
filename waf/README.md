@@ -145,7 +145,7 @@ Tests WAF against various attack vectors:
 **Usage:**
 ```bash
 ./waf/scripts/test-waf-attacks.sh [URL]
-# Example: ./waf/scripts/test-waf-attacks.sh https://charles.work.gd
+# Example: ./waf/scripts/test-waf-attacks.sh https://project.work.gd
 ```
 
 **Output:** Generates test report in `waf/logs/test-results/`

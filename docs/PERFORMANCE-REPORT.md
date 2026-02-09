@@ -448,7 +448,7 @@ upstream backend {
 #!/bin/bash
 # latency-test.sh
 for i in {1..1000}; do
-    curl -s -o /dev/null -w "%{time_total}\n" https://charles.work.gd/
+    curl -s -o /dev/null -w "%{time_total}\n" https://project.work.gd/
 done | awk '{sum+=$1; count++} END {print "Average:", sum/count*1000, "ms"}'
 ```
 
@@ -459,8 +459,8 @@ done | awk '{sum+=$1; count++} END {print "Average:", sum/count*1000, "ms"}'
 # throughput-test.sh
 wrk -t12 -c400 -d60s \
     --latency \
-    -H "Host: charles.work.gd" \
-    https://charles.work.gd/
+    -H "Host: project.work.gd" \
+    https://project.work.gd/
 ```
 
 #### Stress Test
@@ -470,7 +470,7 @@ wrk -t12 -c400 -d60s \
 # stress-test.sh
 siege -c 500 -t 10m \
     --content-type="application/x-www-form-urlencoded" \
-    'https://charles.work.gd/ POST data=test'
+    'https://project.work.gd/ POST data=test'
 ```
 
 ---

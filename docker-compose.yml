@@ -1,40 +1,16 @@
 services:
-  bwapp:
-    image: mageblood/bwapp:amd64
-    container_name: bwapp
-    restart: unless-stopped
-    networks:
-      - waf-net
-
-  # nginx:
-  #   image: nginx:stable
-  #   container_name: bwapp-proxy
-  #   depends_on:
-  #     - bwapp
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-  #     - ./certs:/etc/certs:ro
-  #   networks:
-  #     - waf-net
-
   waf:
     image: owasp/modsecurity-crs:nginx
     container_name: waf-proxy
     entrypoint: [ "/opt/waf-scripts/docker-entrypoint-wrapper.sh" ]
     command: [ "nginx", "-g", "daemon off;" ]
-    depends_on:
-      - bwapp
     restart: unless-stopped
     ports:
       - "80:80"
       - "8080:8080" # Metrics endpoint for Prometheus
     environment:
       - SERVER_NAME=localhost
-      - BACKEND=http://bwapp:80
+      - BACKEND=https://juice-shop.herokuapp.com
       # ModSecurity Configuration
       - MODSEC_RULE_ENGINE=On
       - PARANOIA=2

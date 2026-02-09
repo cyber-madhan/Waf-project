@@ -453,7 +453,7 @@ SecRuleEngine On  # Blocking mode active
 
 echo "=== OWASP Top 10 WAF Verification ==="
 
-TARGET="https://charles.work.gd"
+TARGET="https://project.work.gd"
 
 # A03: SQL Injection
 echo -n "Testing SQL Injection Protection... "

@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # SSL Certificate Management Script for WAF Lab
-# Generates wildcard SSL certificate for *.charles.work.gd
+# Generates wildcard SSL certificate for *.project.work.gd
 
 set -e
 
-DOMAIN="charles.work.gd"
-WILDCARD_DOMAIN="*.charles.work.gd"
+DOMAIN="project.work.gd"
+WILDCARD_DOMAIN="*.project.work.gd"
 CERT_DIR="/root/waf-lab/certs"
 
 # Colors
@@ -46,7 +46,7 @@ generate_wildcard_cert() {
     certbot certonly \
         --manual \
         --preferred-challenges dns \
-        --email admin@charles.work.gd \
+        --email admin@project.work.gd \
         --agree-tos \
         --no-eff-email \
         -d "$DOMAIN" \
@@ -132,7 +132,7 @@ SSL Certificate Management for WAF Lab
 Usage: $0 [COMMAND]
 
 Commands:
-    generate    Generate new wildcard certificate (*.charles.work.gd)
+    generate    Generate new wildcard certificate (*.project.work.gd)
     renew       Renew existing certificates
     check       Check certificate expiration
     info        Show detailed certificate information

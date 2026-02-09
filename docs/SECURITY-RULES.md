@@ -261,7 +261,7 @@ SecRule REQUEST_COOKIES|REQUEST_COOKIES_NAMES|REQUEST_BODY|ARGS|ARGS_NAMES \
 
 **Test Command:**
 ```bash
-curl -k "https://charles.work.gd/test?id=1'+OR+'1'='1"
+curl -k "https://project.work.gd/test?id=1'+OR+'1'='1"
 # Expected: HTTP 403 Forbidden
 ```
 
@@ -293,7 +293,7 @@ SecRule REQUEST_COOKIES|REQUEST_COOKIES_NAMES|REQUEST_BODY|ARGS|ARGS_NAMES \
 
 **Test Command:**
 ```bash
-curl -k "https://charles.work.gd/test?q=<script>alert(1)</script>"
+curl -k "https://project.work.gd/test?q=<script>alert(1)</script>"
 # Expected: HTTP 403 Forbidden
 ```
 
@@ -324,7 +324,7 @@ SecRule REQUEST_URI|ARGS|ARGS_NAMES|REQUEST_COOKIES|REQUEST_COOKIES_NAMES \
 
 **Test Command:**
 ```bash
-curl -k "https://charles.work.gd/test?file=../../../etc/passwd"
+curl -k "https://project.work.gd/test?file=../../../etc/passwd"
 # Expected: HTTP 403 Forbidden
 ```
 
@@ -355,7 +355,7 @@ SecRule ARGS|ARGS_NAMES|REQUEST_COOKIES|REQUEST_COOKIES_NAMES \
 
 **Test Command:**
 ```bash
-curl -k "https://charles.work.gd/test?cmd=;cat+/etc/passwd"
+curl -k "https://project.work.gd/test?cmd=;cat+/etc/passwd"
 # Expected: HTTP 403 Forbidden
 ```
 
@@ -402,10 +402,10 @@ File: `monitoring-exclusions.conf`
 # Purpose: Disable WAF inspection for monitoring subdomain to prevent
 #          false positives on Grafana's PromQL/LogQL queries
 #
-# Affected: monitoring.charles.work.gd
+# Affected: monitoring.project.work.gd
 # =============================================================================
 
-SecRule REQUEST_HEADERS:Host "@rx ^monitoring\.charles\.work\.gd$" \
+SecRule REQUEST_HEADERS:Host "@rx ^monitoring\.project\.work\.gd$" \
     "id:9999001,\
     phase:1,\
     pass,\
@@ -713,39 +713,39 @@ echo "=== WAF Security Test Suite ==="
 # SQL Injection Tests
 echo -e "\n[1] SQL Injection Tests"
 echo -n "  Basic SQLi: "
-curl -sk -o /dev/null -w "%{http_code}" "https://charles.work.gd/test?id=1'+OR+'1'='1"
+curl -sk -o /dev/null -w "%{http_code}" "https://project.work.gd/test?id=1'+OR+'1'='1"
 echo " (expect 403)"
 
 echo -n "  Union SQLi: "
-curl -sk -o /dev/null -w "%{http_code}" "https://charles.work.gd/test?id=1+UNION+SELECT+*+FROM+users"
+curl -sk -o /dev/null -w "%{http_code}" "https://project.work.gd/test?id=1+UNION+SELECT+*+FROM+users"
 echo " (expect 403)"
 
 # XSS Tests
 echo -e "\n[2] XSS Tests"
 echo -n "  Script Tag: "
-curl -sk -o /dev/null -w "%{http_code}" "https://charles.work.gd/test?q=<script>alert(1)</script>"
+curl -sk -o /dev/null -w "%{http_code}" "https://project.work.gd/test?q=<script>alert(1)</script>"
 echo " (expect 403)"
 
 echo -n "  Event Handler: "
-curl -sk -o /dev/null -w "%{http_code}" "https://charles.work.gd/test?q=<img+src=x+onerror=alert(1)>"
+curl -sk -o /dev/null -w "%{http_code}" "https://project.work.gd/test?q=<img+src=x+onerror=alert(1)>"
 echo " (expect 403)"
 
 # LFI Tests
 echo -e "\n[3] LFI Tests"
 echo -n "  Path Traversal: "
-curl -sk -o /dev/null -w "%{http_code}" "https://charles.work.gd/test?file=../../../etc/passwd"
+curl -sk -o /dev/null -w "%{http_code}" "https://project.work.gd/test?file=../../../etc/passwd"
 echo " (expect 403)"
 
 # RCE Tests
 echo -e "\n[4] RCE Tests"
 echo -n "  Command Injection: "
-curl -sk -o /dev/null -w "%{http_code}" "https://charles.work.gd/test?cmd=;cat+/etc/passwd"
+curl -sk -o /dev/null -w "%{http_code}" "https://project.work.gd/test?cmd=;cat+/etc/passwd"
 echo " (expect 403)"
 
 # Legitimate Request
 echo -e "\n[5] Legitimate Request Test"
 echo -n "  Normal Request: "
-curl -sk -o /dev/null -w "%{http_code}" "https://charles.work.gd/"
+curl -sk -o /dev/null -w "%{http_code}" "https://project.work.gd/"
 echo " (expect 200/302)"
 
 echo -e "\n=== Tests Complete ==="

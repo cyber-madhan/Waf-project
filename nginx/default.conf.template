@@ -5,9 +5,14 @@ server {
 
     location / {
         proxy_pass ${BACKEND};
-        proxy_set_header Host $host;
+        # Forward headers
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-For $remote_addr;
+        
+        # SSL Proxy settings for external targets
+        proxy_ssl_server_name on;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
+        resolver 8.8.8.8 ipv6=off;
     }
 }
 

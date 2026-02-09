@@ -248,7 +248,7 @@ datasources:
 
 | Method | URL | Notes |
 |--------|-----|-------|
-| Domain | https://monitoring.charles.work.gd | Production access |
+| Domain | https://monitoring.project.work.gd | Production access |
 | Direct IP | http://[SERVER_IP]:3000 | Development/testing |
 
 **Credentials:**
@@ -271,8 +271,8 @@ datasources:
 
 | Panel | Data Source | Query |
 |-------|-------------|-------|
-| Total Requests | Loki | `sum(count_over_time({container="waf-proxy"} \|~ "charles.work.gd" [$__range]))` |
-| Success Requests | Loki | `sum(count_over_time({container="waf-proxy"} \|~ "charles.work.gd" \|~ "\" (200\|301\|302\|304) " [$__range]))` |
+| Total Requests | Loki | `sum(count_over_time({container="waf-proxy"} \|~ "project.work.gd" [$__range]))` |
+| Success Requests | Loki | `sum(count_over_time({container="waf-proxy"} \|~ "project.work.gd" \|~ "\" (200\|301\|302\|304) " [$__range]))` |
 | Blocked Requests | Loki | `sum(count_over_time({container="waf-proxy"} \|= "403 Forbidden" [$__range]))` |
 | Request Rate | Prometheus | `rate(nginx_http_requests_total[$__rate_interval])` |
 | HTTP Status Codes | Loki | Per-status count queries |
@@ -452,7 +452,7 @@ Configure in Grafana UI:
 {container="waf-proxy"}
 
 # Filter by domain
-{container="waf-proxy"} |~ "charles.work.gd"
+{container="waf-proxy"} |~ "project.work.gd"
 
 # Only blocked requests
 {container="waf-proxy"} |= "403 Forbidden"
@@ -651,7 +651,7 @@ docker ps | grep -E "prometheus|grafana|loki"
 
 | Service | URL | Credentials |
 |---------|-----|-------------|
-| Grafana | https://monitoring.charles.work.gd | admin / WafAdmin123! |
+| Grafana | https://monitoring.project.work.gd | admin / WafAdmin123! |
 | Prometheus | http://localhost:9090 | None |
 | Loki | http://localhost:3100 | None |
 

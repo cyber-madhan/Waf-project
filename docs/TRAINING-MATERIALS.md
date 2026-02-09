@@ -120,7 +120,7 @@ The CRS provides protection against:
 
 ### 3.1 Accessing Grafana
 
-1. Open browser to: https://monitoring.charles.work.gd
+1. Open browser to: https://monitoring.project.work.gd
 2. Login with credentials:
    - Username: `admin`
    - Password: `WafAdmin123!`
@@ -661,8 +661,8 @@ docker compose restart waf-proxy
 
 | Service | URL |
 |---------|-----|
-| Application | https://charles.work.gd |
-| Grafana | https://monitoring.charles.work.gd |
+| Application | https://project.work.gd |
+| Grafana | https://monitoring.project.work.gd |
 | Prometheus | http://localhost:9090 |
 
 ### 10.3 Emergency Contacts

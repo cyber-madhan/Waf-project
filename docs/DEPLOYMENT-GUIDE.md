@@ -245,7 +245,7 @@ chmod -R 750 waf/scripts/
 Edit `nginx/default.conf`:
 
 ```nginx
-# Replace charles.work.gd with your domain
+# Replace project.work.gd with your domain
 server {
     listen 443 ssl http2;
     server_name your-domain.com;
